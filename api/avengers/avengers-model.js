@@ -25,6 +25,6 @@ async function update(id, changes) {
   return null;
 }
 
-async function remove(id) {
-  await db("avengers").delete().where({ id });
+function remove(id) {
+  return db("avengers").delete().where({ id });
 }

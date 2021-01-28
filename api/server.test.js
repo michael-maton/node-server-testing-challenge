@@ -48,4 +48,28 @@ describe("server", () => {
       expect(res.body).toMatchObject({ id: 1, ...Thor });
     });
   });
+
+  describe("DELETE /avengers/:id", () => {
+    it("responds with status code 200", async () => {
+        await db.migrate.latest();
+        await db.seed.run();
+        const res = await request(server).delete("/avengers/1");
+        expect(res.status).toBe(200);
+    });
+    it("responds with confirmation", async () => {
+        await db.migrate.latest();
+        await db.seed.run();
+        const res = await request(server).delete("/avengers/1");
+        expect(res.text).toMatch(/The avenger has been snapped into dust by Thanos.../);
+    });
+    it("the new database is the correct length", async () => {
+        await db.migrate.latest();
+        await db.seed.run();
+        let all = await db("avengers")
+        expect(all).toHaveLength(4)
+        await request(server).delete("/avengers/1");
+        all = await db("avengers")
+        expect(all).toHaveLength(3)
+    });
+  });
 });

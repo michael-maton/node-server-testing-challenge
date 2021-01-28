@@ -31,7 +31,13 @@ server.post("/avengers", (req, res) => {
 });
 
 server.delete("/avengers/:id", (req, res) => {
-  res.end();
+  Avenger.remove(req.params.id)
+    .then(() => {
+      res.status(200).json({ message: "The avenger has been snapped into dust by Thanos..." });
+    })
+    .catch((err) => {
+      res.status(500).json({ error: err.message });
+    });
 });
 
 module.exports = server;
