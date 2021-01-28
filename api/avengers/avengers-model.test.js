@@ -27,19 +27,44 @@ afterAll(async () => {
 });
 
 describe("tests the avengers model", () => {
-  it("inserts avenger into database", async () => {
-    let all;
-    await Avenger.add(Thor);
-    all = await db("avengers");
-    expect(all).toHaveLength(1);
+  describe("get function", () => {
+    it("get function returns entire avengers db", async () => {
+      await db.migrate.latest();
+      await db.seed.run();
 
-    await Avenger.add(Hulk);
-    all = await db("avengers");
-    expect(all).toHaveLength(2);
+      const all = await Avenger.getAll();
+      expect(all).toHaveLength(4);
+    });
   });
 
-  it("returns newly added avenger", async () => {
-    const newAvenger = await Avenger.add(Thor);
-    expect(newAvenger).toMatchObject({ ...Thor } );
+  describe("insert function", () => {
+    it("inserts avenger into database", async () => {
+      let all;
+      await Avenger.add(Thor);
+      all = await db("avengers");
+      expect(all).toHaveLength(1);
+
+      await Avenger.add(Hulk);
+      all = await db("avengers");
+      expect(all).toHaveLength(2);
+    });
+
+    it("returns newly added avenger", async () => {
+      const newAvenger = await Avenger.add(Thor);
+      expect(newAvenger).toMatchObject({ ...Thor });
+    });
+  });
+
+  describe("delete function", () => {
+    it("deletes avenger from database", async () => {
+      let all;
+      await Avenger.add(Thor);
+      all = await db("avengers");
+      expect(all).toHaveLength(1);
+
+      await Avenger.remove(1);
+      all = await db("avengers");
+      expect(all).toHaveLength(0);
+    });
   });
 });
