@@ -37,4 +37,15 @@ describe("server", () => {
       expect(all.body).toHaveLength(4);
     });
   });
+
+  describe("POST /avengers", () => {
+    it("responds with status code 201", async () => {
+      const res = await request(server).post("/avengers").send(Thor);
+      expect(res.status).toBe(201);
+    });
+    it("responds with new avenger", async () => {
+      const res = await request(server).post("/avengers").send(Thor);
+      expect(res.body).toMatchObject({ id: 1, ...Thor });
+    });
+  });
 });
