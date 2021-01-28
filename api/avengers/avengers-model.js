@@ -16,8 +16,9 @@ module.exports = {
     return null
   }
   
-  async function add(hobbit) {
-    return null
+  async function add(avenger) {
+    const [id] = await db("avengers").insert(avenger)
+    return db("avengers").where({ id }).first();
   }
   
   async function update(id, changes) {

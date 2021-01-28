@@ -1,6 +1,6 @@
 const express = require("express");
 
-const Avengers = require("./avengers/avengers-model.js");
+const Avenger = require("./avengers/avengers-model.js");
 
 const server = express();
 
@@ -11,13 +11,27 @@ server.get("/", (req, res) => {
 });
 
 server.get("/avengers", (req, res) => {
-    Avengers.getAll()
-        .then((avengers) => {
-            res.status(200).json(avengers);
-        })
-        .catch(err => {
-            res.status(500).json({ error: err.message })
-        })
+  Avenger.getAll()
+    .then((avengers) => {
+      res.status(200).json(avengers);
+    })
+    .catch((err) => {
+      res.status(500).json({ error: err.message });
+    });
+});
+
+server.post("/avengers", (req, res) => {
+  Avenger.add(req.body)
+    .then((avenger) => {
+      res.status(201).json(avenger);
+    })
+    .catch((err) => {
+      res.status(500).json({ error: err.message });
+    });
+});
+
+server.delete("/avengers/:id", (req, res) => {
+  res.end();
 });
 
 module.exports = server;
